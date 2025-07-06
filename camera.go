@@ -12,7 +12,7 @@ type ShipCamera struct {
 	Rotation rl.Quaternion
 }
 
-func (cam *ShipCamera) HandleInput() {
+func (cam *ShipCamera) HandleInput() { //Takes players input and updates camera's rotation
 	var rotationSpeed float32 = 0.01
 	if rl.IsKeyDown(rl.KeyRight) {
 		// Yaw right
@@ -51,7 +51,7 @@ func (cam *ShipCamera) HandleInput() {
 	}
 }
 
-func (cam *ShipCamera) HandleRotation() {
+func (cam *ShipCamera) HandleRotation() { //Actually changes camera's rotation
 	rotationMatrix := rl.QuaternionToMatrix(cam.Rotation)
 
 	cam.Forward = rl.Vector3Transform(rl.NewVector3(0, 0, -1), rotationMatrix)

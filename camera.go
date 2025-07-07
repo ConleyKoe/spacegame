@@ -26,13 +26,13 @@ func (cam *ShipCamera) HandleInput() { //Takes players input and updates camera'
 	//Rotation functions
 	if rl.IsKeyDown(rl.KeyRight) {
 		// Yaw right
-		q := rl.QuaternionFromAxisAngle(rl.NewVector3(0, 1, 0), -rotationSpeed)
+		q := rl.QuaternionFromAxisAngle(rl.NewVector3(0, 1, 0), rotationSpeed)
 		cam.Rotation = rl.QuaternionMultiply(q, cam.Rotation)
 	}
 
 	if rl.IsKeyDown(rl.KeyLeft) {
 		// Yaw left
-		q := rl.QuaternionFromAxisAngle(rl.NewVector3(0, 1, 0), rotationSpeed)
+		q := rl.QuaternionFromAxisAngle(rl.NewVector3(0, 1, 0), -rotationSpeed)
 		cam.Rotation = rl.QuaternionMultiply(q, cam.Rotation)
 	}
 

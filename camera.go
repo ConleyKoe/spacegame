@@ -5,16 +5,18 @@ import (
 )
 
 type ShipCamera struct {
-	Position rl.Vector3
-	Forward  rl.Vector3
-	Up       rl.Vector3
-	Right    rl.Vector3
-	Rotation rl.Quaternion
+	Position      rl.Vector3
+	Forward       rl.Vector3
+	Up            rl.Vector3
+	Right         rl.Vector3
+	Rotation      rl.Quaternion
+	RotationSpeed float32
+	MovementSpeed float32
 }
 
 func (cam *ShipCamera) HandleInput() { //Takes players input and updates camera's rotation
-	var rotationSpeed float32 = 0.05
-	var movementSpeed float32 = 0.05
+	var rotationSpeed float32 = cam.RotationSpeed
+	var movementSpeed float32 = cam.MovementSpeed
 
 	//Creates a rotation matrix from our camera's current orientation to align the global forward and right vectors to our current
 	//view direction
@@ -22,6 +24,29 @@ func (cam *ShipCamera) HandleInput() { //Takes players input and updates camera'
 	//Aligns our direction vectors by multiplying the global forward and right directions
 	forward := rl.Vector3Transform(rl.NewVector3(0, 0, -1), rotMatrix)
 	right := rl.Vector3Transform(rl.NewVector3(1, 0, 0), rotMatrix)
+
+	//Debug camera functions
+	if rl.IsKeyDown(rl.KeyT) {
+		cam.MovementSpeed = 0.001
+	}
+	if rl.IsKeyDown(rl.KeyG) {
+		cam.MovementSpeed = 0.1
+	}
+	if rl.IsKeyDown(rl.KeyB) {
+		cam.MovementSpeed = 100
+	}
+	if rl.IsKeyDown(rl.KeyH) {
+		cam.MovementSpeed = 1000
+	}
+	if rl.IsKeyDown(rl.KeyN) {
+		cam.MovementSpeed = 1
+	}
+	if rl.IsKeyDown(rl.KeyP) {
+		cam.Position = rl.NewVector3(0, 0, 384300)
+	}
+	if rl.IsKeyDown(rl.KeyL) {
+		cam.Position = rl.NewVector3(0, 0, 100)
+	}
 
 	//Rotation functions
 	if rl.IsKeyDown(rl.KeyRight) {

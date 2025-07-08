@@ -14,7 +14,7 @@ const KMtoUnits float32 = 0.001
 
 func main() {
 	var shipCam = ShipCamera{ //Setting up custom camera
-		Position:      rl.NewVector3(0, 0, 384100),
+		Position:      rl.NewVector3(0, 0, 16400),
 		Forward:       rl.NewVector3(0, 0, 1),
 		Up:            rl.NewVector3(0, 1, 0),
 		Right:         rl.NewVector3(1, 0, 0),
@@ -26,7 +26,7 @@ func main() {
 		Position:   rl.NewVector3(0, 0, 0),
 		Target:     rl.Vector3Add(shipCam.Position, shipCam.Forward),
 		Up:         shipCam.Up,
-		Fovy:       40,
+		Fovy:       50,
 		Projection: rl.CameraPerspective,
 	}
 
@@ -75,13 +75,19 @@ func main() {
 		rl.BeginMode3D(rlCamera)
 		shipCam.HandleInput()    //Handle input from custom camera
 		shipCam.HandleRotation() //Handle rotation
-		relShipPos := rl.Vector3Subtract(rl.NewVector3(0, 0, 100), shipCam.Position)
+
+		//getting scaled down positions of the earth, moon, and test sidewinder
+		relShipPos := rl.Vector3Subtract(rl.NewVector3(0, 0, 6731), shipCam.Position)
 		relEarthPos := rl.Vector3Subtract(Earth.Position, shipCam.Position)
 		relMoonPos := rl.Vector3Subtract(Moon.Position, shipCam.Position)
-		rl.DrawModel(*Earth.Model, relEarthPos, (Earth.Radius)*KMtoUnits, rl.White)
-		rl.DrawModel(*Moon.Model, relMoonPos, Moon.Radius*KMtoUnits, rl.White)
-		rl.DrawModel(sidewinder, relShipPos, shipLength*KMtoUnits, rl.Red)
-		rl.DrawModelWires(sidewinder, relShipPos, shipLength*KMtoUnits, rl.White)
+
+		//drawing our models at the correct scale and positions (scaled down again so that they will be within the view frustum)
+		rl.DrawModel(*Earth.Model, rl.Vector3Scale(relEarthPos, KMtoUnits), (Earth.Radius)*KMtoUnits, rl.White)
+		rl.DrawModel(*Moon.Model, rl.Vector3Scale(relMoonPos, KMtoUnits), Moon.Radius*KMtoUnits, rl.White)
+
+		//draws our test sidewinder and its wireframe
+		rl.DrawModel(sidewinder, rl.Vector3Scale(relShipPos, KMtoUnits), shipLength*KMtoUnits, rl.Red)
+		rl.DrawModelWires(sidewinder, rl.Vector3Scale(relShipPos, KMtoUnits), shipLength*KMtoUnits, rl.White)
 		//rl.DrawCubeV(rl.NewVector3(0, 0, 6.377), rl.NewVector3(0.01, 0.01, 0.01), rl.Green)
 		rl.EndMode3D()
 		rl.DrawFPS(10, 10)
